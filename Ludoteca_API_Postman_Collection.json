@@ -1,0 +1,383 @@
+{
+  "info": {
+    "_postman_id": "7c6e1f4a-6a77-4f4d-9b0a-ludoteca-api",
+    "name": "Ludoteca API - Complete Test Suite",
+    "description": "Colección de Postman para probar todas las rutas HTTP definidas por la API de Ludoteca. Incluye health check, CRUD de juegos, filtros y pruebas automáticas de respuestas.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "gameId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "GET /health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/health"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('status = ok', function () { pm.expect(pm.response.json().status).to.eql('ok'); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Games - GET",
+      "item": [
+        {
+          "name": "GET /api/games - List all",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/games"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Response is an array', function () { pm.expect(pm.response.json()).to.be.an('array'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/games?search=ajedrez",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/games?search=ajedrez",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "games"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "ajedrez"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Response is an array', function () { pm.expect(pm.response.json()).to.be.an('array'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/games?category=estrategia",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/games?category=estrategia"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Response is an array', function () { pm.expect(pm.response.json()).to.be.an('array'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/games?minPlayers=4",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/games?minPlayers=4"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Response is an array', function () { pm.expect(pm.response.json()).to.be.an('array'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/games?inStock=true",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/games?inStock=true"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Response is an array', function () { pm.expect(pm.response.json()).to.be.an('array'); });",
+                  "pm.test('All returned games have stock > 0', function () { pm.response.json().forEach(function(g) { pm.expect(g.stock).to.be.above(0); }); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/games?inStock=false",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/games?inStock=false"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Response is an array', function () { pm.expect(pm.response.json()).to.be.an('array'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/games - Combined filters",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/games?search=juego&category=estrategia&minPlayers=2&inStock=true"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Response is an array', function () { pm.expect(pm.response.json()).to.be.an('array'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/games/:id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/games/{{gameId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Response is an object', function () { pm.expect(pm.response.json()).to.be.an('object'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/games/:id - ID inexistente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/games/999999"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Request completed with a 2xx response', function () { pm.expect(pm.response.code).to.be.within(200, 299); });",
+                  "pm.test('API returns null for nonexistent game', function () { pm.expect(pm.response.json()).to.eql(null); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Games - CRUD",
+      "item": [
+        {
+          "name": "POST /api/games - Create game",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Postman Test Game\",\n  \"description\": \"Juego creado automáticamente desde Postman\",\n  \"category\": \"estrategia\",\n  \"minPlayers\": 2,\n  \"maxPlayers\": 4,\n  \"minAge\": 10,\n  \"stock\": 5,\n  \"tags\": [\n    \"postman\",\n    \"test\",\n    \"estrategia\"\n  ]\n}"
+            },
+            "url": "{{baseUrl}}/api/games"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', function () { pm.response.to.have.status(201); });",
+                  "const game = pm.response.json();",
+                  "pm.test('Created game has an id', function () { pm.expect(game.id).to.be.a('number'); });",
+                  "pm.test('Created game has expected name', function () { pm.expect(game.name).to.eql('Postman Test Game'); });",
+                  "pm.collectionVariables.set('gameId', game.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT /api/games/:id - Update game",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Postman Test Game Updated\",\n  \"description\": \"Juego actualizado automáticamente desde Postman\",\n  \"category\": \"familia\",\n  \"minPlayers\": 2,\n  \"maxPlayers\": 6,\n  \"minAge\": 8,\n  \"stock\": 10,\n  \"tags\": [\n    \"postman\",\n    \"updated\"\n  ]\n}"
+            },
+            "url": "{{baseUrl}}/api/games/{{gameId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+                  "const game = pm.response.json();",
+                  "pm.test('Updated name is correct', function () { pm.expect(game.name).to.eql('Postman Test Game Updated'); });",
+                  "pm.test('Updated stock is correct', function () { pm.expect(game.stock).to.eql(10); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT /api/games/:id - ID inexistente",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Does Not Exist\",\n  \"description\": \"Prueba\",\n  \"category\": \"test\",\n  \"minPlayers\": 1,\n  \"maxPlayers\": 2,\n  \"minAge\": 5,\n  \"stock\": 0,\n  \"tags\": []\n}"
+            },
+            "url": "{{baseUrl}}/api/games/999999"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Request completed with a 2xx response', function () { pm.expect(pm.response.code).to.be.within(200, 299); });",
+                  "pm.test('API returns null for nonexistent game', function () { pm.expect(pm.response.json()).to.eql(null); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE /api/games/:id - Delete created game",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/api/games/{{gameId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('deleted is true', function () { pm.expect(pm.response.json().deleted).to.eql(true); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE /api/games/:id - ID inexistente",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/api/games/999999"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('deleted is false', function () { pm.expect(pm.response.json().deleted).to.eql(false); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
