@@ -1,14 +1,14 @@
-import { CreateGameInput, Game } from "../types/game.js";
+import { CreateGameInput, Game, GameFilters } from "../types/game.js";
 import {
   createGame,
   findAllGames,
   findGameById,
   deleteGame,
   updateGame,
-} from "../repositories/game.repository.ts";
+} from "../repositories/game.repository.js";
 
-export async function getAllGames(): Promise<Game[]> {
-  return await findAllGames();
+export async function getAllGames(filters: GameFilters): Promise<Game[]> {
+  return findAllGames(filters);
 }
 
 export async function getGameById(id: number): Promise<Game | null> {

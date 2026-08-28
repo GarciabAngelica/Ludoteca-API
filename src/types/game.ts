@@ -22,3 +22,10 @@ export interface CreateGameInput {
   stock: number;
   tags?: string[];
 }
+
+export interface GameFilters {
+  search?: string;
+  category?: string;
+  minPlayers?: number;
+  inStock?: boolean;
+}
